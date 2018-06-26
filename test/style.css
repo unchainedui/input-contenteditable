@@ -1,0 +1,25 @@
+html,
+body,
+.display {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contenteditable {
+  width: 200px;
+  height: 100px;
+}
+
+[contenteditable]:hover {
+  outline: 1px #00f solid;
+  outline-offset: 5px;
+}
+

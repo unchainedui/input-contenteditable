@@ -1,6 +1,6 @@
 # Unchained UI
 
-## Input 'contenteditable' UI Component
+## Contenteditable UI Component
 
 ### Usage
 

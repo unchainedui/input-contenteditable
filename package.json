@@ -1,7 +1,7 @@
 {
   "name": "uc-input-contenteditable",
   "version": "1.0.0",
-  "description": "Input 'contenteditable' UI Component",
+  "description": "Contenteditable UI Component",
   "main": "index.js",
   "scripts": {
     "build": "fuller -v",

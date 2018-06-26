@@ -2,6 +2,10 @@
 
 ## Contenteditable UI Component
 
+[![NPM Version](https://img.shields.io/npm/v/uc-input-contenteditable.svg?style=flat-square)](https://www.npmjs.com/package/uc-input-contenteditable)
+[![NPM Downloads](https://img.shields.io/npm/dt/uc-input-contenteditable.svg?style=flat-square)](https://www.npmjs.com/package/uc-input-contenteditable)
+
+
 ### Usage
 
 ```js

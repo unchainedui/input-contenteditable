@@ -9,9 +9,9 @@
 ### Usage
 
 ```js
-import input from 'uc-input-contenteditable'
+import Input from 'uc-input-contenteditable';
 
-const elDisplay = get('#display')
+const elDisplay = get('#display');
 
 const input = new Input({
   onChange: val => {

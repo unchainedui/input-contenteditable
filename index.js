@@ -12,7 +12,7 @@ const Input = function(opts) {
   this.input = this.el;
 
   this.setup(opts);
-  this.events.ekeydown = on(this.el, 'keydown', e => {
+  this.events.stopKeys = on(this.el, 'keydown', e => {
     switch (e.keyCode) {
       case 8:
         setTimeout(() => this.sanitizeBackspace(), 0);
@@ -25,7 +25,7 @@ const Input = function(opts) {
   });
 
   if (opts.stopLinks) {
-    this.events.eclick = on(this.el, 'click', e => {
+    this.events.stopLinks = on(this.el, 'click', e => {
       e.preventDefault();
     });
   }
@@ -77,7 +77,7 @@ Input.prototype = compose(
 
     getCarret: function() {
       const el = this.input;
-      el.focus();
+      // el.focus();
       const sel = window.getSelection();
 
       if (sel.rangeCount > 0) {
@@ -137,8 +137,8 @@ Input.prototype = compose(
 
     remove: function() {
       clearTimeout(this.errorTimeout);
-      off(this.el, 'keydown', this.events.ekeydown);
-      off(this.el, 'click', this.events.eclick);
+      off(this.el, 'keydown', this.events.stopKeys);
+      off(this.el, 'click', this.events.stopLinks);
       this.destroy();
       this.el.removeAttribute('contenteditable');
       this._remove && remove(this.el);

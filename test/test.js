@@ -755,8 +755,8 @@
       .split('')
       .map(char => charMap[char] || char)
       .join('')
-      .replace(' ', '-')
-      .replace(/[^-a-z0-9]{1,60}/, '');
+      .replace(/ /ig, '-')
+      .replace(/[^-a-z0-9]{1,60}/ig, '');
   }
 
   var input = {
@@ -788,13 +788,12 @@
       // interface, implement this in your class
     },
 
-    setup: function(opts) {
+    addInput: function(opts) {
       this.debouncedUpdate = debounce(this.update, opts.debounce || 500);
 
       let isMeta = false;
       this._value = this.getValue();
       this.limit = opts.limit;
-      this.events = {};
       this.events.click = on$1(this.el, 'click', e => e.stopPropagation());
       this.events.focus = on$1(this.input, 'focus', () => this.removeClass('input-message'));
       this.events.blur = on$1(this.input, 'blur', () => {
@@ -803,7 +802,6 @@
         this.onKeyUp();
       });
       this.events.paste = on$1(this.input, 'paste', e => this.onPaste(e));
-      this.blur();
       this.events.keydown = on$1(this.input, 'keydown', e => {
         isMeta = e.altKey || e.ctrlKey || e.metaKey;
       });
@@ -815,6 +813,7 @@
       });
 
       opts.placeholder && this.setPlaceholder(opts.placeholder);
+      this.toggleClass('input-value', this._value !== '');
     },
 
     onKeyUp: function() {
@@ -837,7 +836,7 @@
     },
 
     onPaste: function(e) {
-      const str = e.originalEvent.clipboardData.getData('text/plain');
+      const str = e.clipboardData.getData('text/plain');
       const pos = this.getCarret();
       document.execCommand('insertText', false, str);
       e.preventDefault();
@@ -853,7 +852,7 @@
 
     update: function(val, silent) {
       this.removeClass('error');
-      !silent && this.didUpdate && this.didUpdate(val);
+      !silent && this.onChange && this.onChange(val);
     },
 
     focus: function() {
@@ -867,7 +866,7 @@
       return this;
     },
 
-    value: function(val, dontUpdate) {
+    value: function(val, silent) {
       if (val === undefined) {
         return this.getValue();
       }
@@ -877,7 +876,7 @@
 
       if (val !== value) {
         this.setValue(val);
-        if (dontUpdate) {
+        if (silent) {
           this.toggleClass('input-value', val !== '');
         } else {
           this.update(val);
@@ -894,7 +893,7 @@
       return off$1.apply(null, [ this.input ].concat(args));
     },
 
-    destroy: function() {
+    removeInput: function() {
       this.removePlaceholder && this.removePlaceholder();
       this.removeClass('input-msg', 'input-value');
 
@@ -989,8 +988,9 @@
     this.el = opts.el || this.render(opts);
     this.input = this.el;
 
-    this.setup(opts);
-    this.events.ekeydown = on(this.el, 'keydown', e => {
+    this.events = {};
+    this.addInput(opts);
+    this.events.stopKeys = on(this.el, 'keydown', e => {
       switch (e.keyCode) {
         case 8:
           setTimeout(() => this.sanitizeBackspace(), 0);
@@ -1003,7 +1003,7 @@
     });
 
     if (opts.stopLinks) {
-      this.events.eclick = on(this.el, 'click', e => {
+      this.events.stopLinks = on(this.el, 'click', e => {
         e.preventDefault();
       });
     }
@@ -1055,7 +1055,7 @@
 
       getCarret: function() {
         const el = this.input;
-        el.focus();
+        // el.focus();
         const sel = window.getSelection();
 
         if (sel.rangeCount > 0) {
@@ -1115,9 +1115,9 @@
 
       remove: function() {
         clearTimeout(this.errorTimeout);
-        off(this.el, 'keydown', this.events.ekeydown);
-        off(this.el, 'click', this.events.eclick);
-        this.destroy();
+        off(this.el, 'keydown', this.events.stopKeys);
+        off(this.el, 'click', this.events.stopLinks);
+        this.removeInput();
         this.el.removeAttribute('contenteditable');
         this._remove && remove(this.el);
         delete this.el;

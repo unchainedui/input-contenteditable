@@ -8,7 +8,7 @@ module.exports = {
     dst: './test'
   },
 
-  'default': { js, css },
+  'task:default': { js, css },
 
   'belt:js': {
     tools: [ 'src-rollup', 'dst-file' ]

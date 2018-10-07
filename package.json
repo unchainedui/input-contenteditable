@@ -36,6 +36,6 @@
   "dependencies": {
     "uc-compose": "^1.0.0",
     "uc-dom": "^1.2.0",
-    "uc-input": "^1.0.0"
+    "uc-input": "^2.0.0"
   }
 }

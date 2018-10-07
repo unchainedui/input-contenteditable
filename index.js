@@ -11,7 +11,8 @@ const Input = function(opts) {
   this.el = opts.el || this.render(opts);
   this.input = this.el;
 
-  this.setup(opts);
+  this.events = {};
+  this.addInput(opts);
   this.events.stopKeys = on(this.el, 'keydown', e => {
     switch (e.keyCode) {
       case 8:
@@ -139,7 +140,7 @@ Input.prototype = compose(
       clearTimeout(this.errorTimeout);
       off(this.el, 'keydown', this.events.stopKeys);
       off(this.el, 'click', this.events.stopLinks);
-      this.destroy();
+      this.removeInput();
       this.el.removeAttribute('contenteditable');
       this._remove && remove(this.el);
       delete this.el;
